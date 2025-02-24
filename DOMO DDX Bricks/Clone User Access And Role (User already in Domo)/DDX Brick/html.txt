@@ -1,0 +1,37 @@
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+<div class="form">
+  <!-- Use the following HTML code for a text entry field for a parameter -->
+  <div class="form-group row">
+    <label for="input1" class="col-sm-12 col-form-label">User 1</label>
+    <div class="col-sm-12">
+      <input type="text" class="form-control" id="input1" placeholder="Enter userID of person that you want to clone">
+    </div>
+  </div>
+  
+  <!-- Second text entry field for a new parameter -->
+  <div class="form-group row">
+    <label for="input2" class="col-sm-12 col-form-label">User 2</label>
+    <div class="col-sm-12">
+      <input type="text" class="form-control" id="input2" placeholder="Enter userID of target person">
+    </div>
+  </div>
+
+  <button id="startWorkflowButton" class="btn btn-primary btn-start"><!-- This label is set by JavaScript --></button>
+  <br><br>
+  <pre id="resultText"></pre>
+</div>
+
+<br>
+<div class="ui-widget">
+  <label for="users">Search for user info by name: </label>
+  <input id="users" placeholder="Enter a name to search">
+</div><br>
+
+<div id="useravatar"></div><br>
+<table id="userdetailstable"></table>

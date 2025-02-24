@@ -1,0 +1,160 @@
+// DDX Bricks Wiki - See https://developer.domo.com/docs/ddx-bricks
+// for tips on getting started, linking to Domo data, and debugging your app
+
+//--------------------------------------------------
+// Properties
+//--------------------------------------------------
+var startButtonLabel = 'Run';
+var showTestFormEntryButton = false;
+
+// Modify and add or delete the names of each parameter in the workflow
+var param1Name = 'param1';
+var param2Name = 'param2';
+
+// Modify and add or delete the id for the input fields from the HTML for each parameter
+var input1Id = 'input1';
+var input2Id = 'input2';
+
+// Modify this method to match get methods with each parameter type
+function getParameters() {
+    var params = {};
+    getTextEntryParam(params, param1Name, input1Id, '');
+    getTextEntryParam(params, param2Name, input2Id, '');
+    return params;
+}
+
+//---------------------------------------------------
+// For ultimate flexibility, modify the code below!
+//---------------------------------------------------
+
+// Available globals
+var domo = window.domo;
+
+var startButton = document.getElementById('startWorkflowButton');
+startButton.innerText = startButtonLabel;
+
+startButton.onclick = function startWorkflow() {
+    var parameters = getParameters();
+    startWorkflowWithParams("workflow1", parameters);
+}
+
+const startWorkflowWithParams = (alias, params) => {
+    var startURL = '/domo/workflow/v1/models/' + alias + '/start';
+    domo.post(startURL, params).then(data => {
+        console.log(data);
+        document.getElementById('resultText').innerText = `Workflow '${data.modelName}' started successfully`;
+    }).catch(err => {
+        console.log(err);
+        document.getElementById('resultText').innerText = `Start failed`;
+    });
+};
+
+//_______________________________
+//
+// Get Parameter methods
+//_______________________________
+
+function getTextEntryParam(params, paramName, inputId, defaultValue) {
+    var textEntryElement = document.getElementById(inputId);
+    if (textEntryElement.value)
+        params[paramName] = textEntryElement.value;
+    else
+        params[paramName] = defaultValue;
+}
+
+//--------------------------------------------------
+// JavaScript for the First Brick
+//--------------------------------------------------
+var usersData = null;
+var userNames = [];
+var useravatar = document.getElementById('useravatar');
+var userdetailstable = document.getElementById('userdetailstable');
+
+getUsers();
+
+function getUsers() {
+    var usersURL = '/domo/users/v1?includeDetails=true&limit=2000';
+    domo.get(usersURL).then(data => {
+        usersData = data;
+        createUsernamesArray(usersData);
+    }).catch(err => {
+        console.log(err);
+    })
+}
+
+function createUsernamesArray(data) {
+    for (var i = 0; i < data.length; i++)
+        userNames.push(data[i].displayName);
+
+    $("#users").autocomplete({
+        source: userNames
+    });
+
+    $("#users").on("autocompleteclose", function (event, ui) {
+        var userName = $("#users").val();
+        var userIndex = userNames.indexOf(userName);
+        var userObj = usersData[userIndex];
+        var userId = userObj.id;
+
+        displayUserDetails(userId);
+    });
+}
+
+function displayUserDetails(userId) {
+    var userURL = '/domo/users/v1/' + userId + '?includeDetails=true';
+    domo.get(userURL).then(data => {
+        drawUserInfo(data);
+    }).catch(err => {
+        console.log(err);
+    })
+}
+
+function drawUserInfo(data) {
+    useravatar.innerHTML = '';
+    if (data.avatarKey != null) {
+        var imgSrc = data.avatarKey + '?size=100&defaultForeground=fff&defaultBackground=000&defaultText=D'
+        var img = document.createElement("img");
+        img.setAttribute("src", imgSrc);
+        useravatar.appendChild(img);
+    }
+
+    drawUserDetails(data);
+}
+
+function drawUserDetails(data) {
+    userdetailstable.innerHTML = '';
+
+    const fieldsToDisplay = [
+        { key: 'displayName', label: 'Name', value: data.displayName },
+        { key: 'email', label: 'Email', value: data.detail ? data.detail.email : 'N/A' },
+        { key: 'title', label: 'Title', value: data.detail ? data.detail.title : 'N/A' },
+        { key: 'id', label: 'ID', value: data.id }
+    ];
+
+    fieldsToDisplay.forEach(field => {
+        var tr = document.createElement("tr");
+        var tdKey = document.createElement("td");
+        var tdValue = document.createElement("td");
+        tdKey.textContent = field.label + ': ';
+        tdValue.textContent = field.value || 'N/A';
+        tr.appendChild(tdKey);
+        tr.appendChild(tdValue);
+        userdetailstable.appendChild(tr);
+    });
+}
+
+function upcaseFirst(text) {
+    return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+// When enter is pressed after selecting a user, get the details
+$("#users").on('keyup', function (event) {
+    if (event.keyCode === 13) {
+        var userName = $("#users").val();
+        var userIndex = userNames.indexOf(userName);
+        var userObj = usersData[userIndex];
+        var userId = userObj.id;
+
+        displayUserDetails(userId);
+    }
+});
