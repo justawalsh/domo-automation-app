@@ -1,0 +1,23 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+<div class="form">
+  <!-- Use the following html code for a text entry field for a parameter -->
+  <div class="form-group row">
+    <label for="inputPageId" class="col-sm-12 col-form-label">Enter Dashboard ID from webpage address</label>
+    <div class="col-sm-12">
+      <input type="text" class="form-control" id="inputPageId" placeholder="Enter Dashboard ID">
+    </div>
+  </div>
+  
+  <!-- Second text entry field for a new parameter -->
+  <div class="form-group row">
+    <label for="inputDatasourceId" class="col-sm-12 col-form-label">Enter New Dataset ID from webpage address</label>
+    <div class="col-sm-12">
+      <input type="text" class="form-control" id="inputDatasourceId" placeholder="Enter New Dataset ID">
+    </div>
+  </div>
+
+  <button id="startWorkflowButton" class="btn btn-primary btn-start"><!-- This label is set by JavaScript --></button>
+  <br><br>
+  <pre id="resultText"></pre>
+</div>
