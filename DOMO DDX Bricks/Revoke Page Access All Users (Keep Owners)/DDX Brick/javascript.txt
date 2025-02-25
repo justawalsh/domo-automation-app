@@ -8,7 +8,7 @@ var startButtonLabel = 'Run';
 var showTestFormEntryButton = false;
 
 //Modify and add or delete the names of each parameter in the workflow
-var param1Name = 'pageId';
+var param1Name = 'param1';
 
 //Modify and add or delete the id for the input fields from the HTML for each parameter
 var input1Id = 'inputPageId';
