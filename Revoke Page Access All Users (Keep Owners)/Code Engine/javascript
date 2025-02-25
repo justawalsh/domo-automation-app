@@ -1,0 +1,41 @@
+const codeengine = require('codeengine');
+
+/**
+ * Remove all user from page dashboard while keeping all owners
+ *
+ * @param {string} param1 - page id.
+ * @returns {boolean}
+ */
+ 
+async function removeAllUsersExceptOwners(param1) {
+  async function getPageUsers(param1) {
+    const url = `/api/content/v1/share/accesslist/page/${param1}?expandUsers=false`;
+    return await codeengine.sendRequest('GET', url);
+  }
+
+  async function getPageOwners(param1) {
+    const url = `/api/content/v1/pages/${param1}?parts=owners`;
+    const page = await codeengine.sendRequest('GET', url);
+    return page.owners.map(owner => owner.id);
+  }
+
+  async function revokeUserAccess(param1, userId) {
+    const url = `/api/content/v1/share/page/${param1}/user/${userId}`;
+    await codeengine.sendRequest('DELETE', url);
+  }
+
+  try {
+    const { users } = await getPageUsers(param1);
+    const ownerIds = await getPageOwners(param1);
+
+    for (let user of users) {
+      if (!ownerIds.includes(user.id)) {
+        await revokeUserAccess(param1, user.id);
+        console.log(`Revoked access for user ${user.id}`);
+      }
+    }
+    console.log('Successfully removed non-owners from the page.');
+  } catch (error) {
+    console.error('Error removing non-owners:', error);
+  }
+}
