@@ -1,3 +1,5 @@
+*Updated 03/24/2025
+
 # domo-automation-app
 Domo platform automation example for Domopalooza 2025
 
@@ -45,7 +47,7 @@ C.	Change type of parameter (left of parameter name) to "Boolean"
 D.	Change parameter name to "Done"
 E.	Click checkmark at right of parameter name to save.
 Step 4: 
-Click "Save" drop down arrow at top right of browser and select "Save and Deploy" option to save Code Engine function
+Click "Save" drop down arrow at top right of browser and select "Save and Deploy" option to save Code Engine function (if error, refresh browser and then save) *updated 3/24/2025
 Step 5: 
 Repeat steps 1 through 4 in this section to create additional Code Engine packages to perform additional automation tasks.
 	(You are able to combine all the code engine functions into a single package. For the purposes of this exercise, each function package has been separated.)
