@@ -1,4 +1,5 @@
-*Updated 03/24/2025
+*Updated 05/07/2025
+For other Domo DDX examples, check out my other repo: https://github.com/justawalsh/Domo-DDX-Examples
 
 # domo-automation-app
 Domo platform automation example for Domopalooza 2025
